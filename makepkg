@@ -52,6 +52,14 @@ options:
         required: false
         default: "no"
         choices: ["yes", "no"]
+    ignore_arch:
+        description:
+            - Ignore the architecture of the package
+              This is the equivalent of the "-A" parameter
+        required: false
+        default: "no"
+        choices: ["yes", "no"]
+    
 
     as_deps:
         description:
@@ -203,7 +211,13 @@ def make_package(module, pkg, pkg_file_src):
         if rc != 0:
             module.fail_json(msg="failed to extract %s for pkg %s" % (pkg_file, pkg), stderr=stderr)
 
-    cmd = '%smakepkg -scf --noconfirm' % command_prefix
+    arch_param=""
+    if module.params["ignore_arch"]:
+        arch_param = "-A"
+        
+    cmd = '%smakepkg -scf --noconfirm %s' % command_prefix, arch_param
+
+
     rc, stdout, stderr = module.run_command(cmd, check_rc=False, cwd=build_dir)
     if rc != 0:
         module.fail_json(msg="failed to build package %s in %s from %s" % (pkg, pkg_file, build_dir), stderr=stderr)
