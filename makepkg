@@ -340,6 +340,7 @@ def main():
         name         = dict(aliases=['pkg'], required=True),
         state        = dict(choices=['installed', 'present', 'absent', 'removed'], required=True),
         recurse      = dict(default='no', choices=BOOLEANS, type='bool'),
+        ignore_arch  = dict(default='no', choices=BOOLEANS, type='bool'),
         as_deps      = dict(default='no', choices=BOOLEANS, type='bool'),
         build_dir    = dict(default=PACKAGE_CACHE)
     )
