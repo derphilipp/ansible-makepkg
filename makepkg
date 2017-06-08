@@ -59,7 +59,7 @@ options:
         required: false
         default: "no"
         choices: ["yes", "no"]
-    
+
 
     as_deps:
         description:
@@ -148,6 +148,7 @@ def remove_package(module, pkg):
 
     module.exit_json(changed=True, msg="removed package %s" % pkg)
 
+
 def prepare_build_dir(module, pkg_name, sudo_user):
     build_dir = module.params['build_dir']
     uid = pwd.getpwnam(sudo_user).pw_uid
@@ -162,11 +163,12 @@ def prepare_build_dir(module, pkg_name, sudo_user):
 
     if os.stat(directory).st_uid != uid:
         try:
-            os.chown(directory,uid,gid)
+            os.chown(directory, uid, gid)
         except OSError as e:
             module.fail_json(msg="failed to change owner of build directory %s" % (e.strerror))
 
     return directory
+
 
 def make_package(module, pkg, pkg_file_src):
     sudo_user = os.environ.get('SUDO_USER')
@@ -214,7 +216,7 @@ def make_package(module, pkg, pkg_file_src):
     arch_param=""
     if module.params["ignore_arch"]:
         arch_param = "-A"
-        
+
     cmd = '%smakepkg -scf --noconfirm %s' % command_prefix, arch_param
 
 
